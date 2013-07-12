@@ -26,17 +26,22 @@ import android.os.AsyncTask;
 import android.util.Base64;
 
 public class NetworkTask extends AsyncTask<String, Void, HttpResponse> {
+	String ip = null;
+	String port = null;
+	String username = null;
+	String password = null;
+	String address = null;
+
     @Override
     protected HttpResponse doInBackground(String... params) {
-    	String ip = params[0];
-    	String port = params[1];
-    	String username = params[2];
-    	String password = params[3];
-    	String address = params[4];
+    	ip = params[0];
+    	port = params[1];
+    	username = params[2];
+    	password = params[3];
+    	address = params[4];
     	int port_as_int = Integer.parseInt(port);
     	
     	String link = "http://" + ip + ":" + port + "/veriniceserver/rest/json/" + address + "/get";
-    	StringBuilder builder = new StringBuilder();
     	DefaultHttpClient httpclient = new DefaultHttpClient();
         
     	
@@ -71,24 +76,28 @@ public class NetworkTask extends AsyncTask<String, Void, HttpResponse> {
     @Override
     protected void onPostExecute(HttpResponse result) {
         //Do something with result
+    	String answer = null;
         if (result != null){
         	try{
+        		
+        	//Read the result
         	BufferedReader r = new BufferedReader(new InputStreamReader(result.getEntity().getContent()));
-
         	StringBuilder total = new StringBuilder();
-
         	String line = null;
-
         	while ((line = r.readLine()) != null) {
         	   total.append(line);
         	}
-   
-        	System.out.println(total);
+        	answer = total.toString();
+        	System.out.println("Answer: " + answer);
         	}
         	catch (Exception e) {
         		e.printStackTrace();
+        	} 
+        	finally {
+
         	}
+        } else {
+
         }
-           
     }
 }
