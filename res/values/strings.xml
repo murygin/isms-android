@@ -9,5 +9,15 @@
     <string name="button_send">Send</string>
     <string name="title_activity_main">MainActivity</string>
     
-
+    <!-- Login Strings -->
+    <string name="login">Login</string>
+    <string name="port">Port</string>
+    <string name="ip_address">IP Adresse</string>
+    <string name="username">Benutzer</string>
+    <string name="password">Passwort</string>
+    
+    <!-- Iso27000Tasks Screen -->
+	<string name="iso27000tasks">ISO 27000 Tasks</string>
+	
+	
 </resources>

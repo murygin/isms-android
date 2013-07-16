@@ -25,7 +25,7 @@
           <TextView android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#372c24"
-                android:text="Username"/>
+                android:text="@string/username"/>
           <EditText 
               	android:id="@+id/username_textfield"
               	android:layout_width="fill_parent"
@@ -37,7 +37,7 @@
           <TextView android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#372c24"
-                android:text="Password"/>
+                android:text="@string/password"/>
           <EditText 
               	android:id="@+id/password_textfield"
               	android:layout_width="fill_parent"
@@ -50,7 +50,7 @@
           <TextView android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#372c24"
-                android:text="IP Adresse"/>
+                android:text="@string/ip_address"/>
           <EditText 
               	android:id="@+id/ip_address_textfield"
               	android:layout_width="fill_parent"
@@ -65,7 +65,7 @@
               	android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#372c24"
-                android:text="port"/>
+                android:text="@string/port"/>
           <EditText android:id="@+id/port_textfield"
               	android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
@@ -78,7 +78,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
-                android:text="Login"/>
+                android:text="@string/login"/>
           <!-- Link to Registration Screen -->
           <TextView android:id="@+id/link_to_register"
                 android:layout_width="fill_parent"

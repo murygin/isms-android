@@ -21,9 +21,24 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.http.AndroidHttpClient;
 import android.os.AsyncTask;
 import android.util.Base64;
+import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class NetworkTask extends AsyncTask<String, Void, HttpResponse> {
 	String ip = null;
@@ -32,6 +47,16 @@ public class NetworkTask extends AsyncTask<String, Void, HttpResponse> {
 	String password = null;
 	String address = null;
 
+	public MainActivity activity;
+	public Iso27000Tasks Iso27000Tasks_activity;
+	
+	public NetworkTask(MainActivity a){
+		activity = a;
+	}
+	public NetworkTask(Iso27000Tasks a){
+		Iso27000Tasks_activity = a;
+	}
+	
     @Override
     protected HttpResponse doInBackground(String... params) {
     	ip = params[0];
@@ -69,7 +94,8 @@ public class NetworkTask extends AsyncTask<String, Void, HttpResponse> {
             e.printStackTrace();
             return null;
         } finally {
-        	httpclient.getConnectionManager().shutdown();
+        	
+        	// httpclient.getConnectionManager().shutdown();
     }
     }
 
@@ -77,27 +103,37 @@ public class NetworkTask extends AsyncTask<String, Void, HttpResponse> {
     protected void onPostExecute(HttpResponse result) {
         //Do something with result
     	String answer = null;
+    	
         if (result != null){
-        	try{
-        		
+        	try{	
         	//Read the result
-        	BufferedReader r = new BufferedReader(new InputStreamReader(result.getEntity().getContent()));
+
+        	InputStream test = result.getEntity().getContent();
+
+        	BufferedReader r = new BufferedReader(new InputStreamReader(test));
         	StringBuilder total = new StringBuilder();
         	String line = null;
         	while ((line = r.readLine()) != null) {
         	   total.append(line);
         	}
         	answer = total.toString();
-        	System.out.println("Answer: " + answer);
+        	
         	}
         	catch (Exception e) {
         		e.printStackTrace();
         	} 
         	finally {
-
+        		
         	}
-        } else {
-
         }
-    }
+        
+        //Callback with JSON String
+        if (activity != null){
+        	System.out.println("Main call");
+        	activity.networkReady(answer);
+        } else if (Iso27000Tasks_activity != null){
+        	System.out.println("iso call");
+        	Iso27000Tasks_activity.networkReady(answer);
+        }
+    } 
 }
