@@ -19,5 +19,11 @@
     <!-- Iso27000Tasks Screen -->
 	<string name="iso27000tasks">ISO 27000 Tasks</string>
 	
+	<!-- Iso27000Tasks Editor Screen -->
+	<string name="iso27000tasksEditor">ISO 27000 Tasks</string>
+	<string name="active_item_title">Titel</string>
+	<string name="active_item_control_title">Object</string>
+	<string name="active_item_due_date">Due Date</string>
+	
 	
 </resources>

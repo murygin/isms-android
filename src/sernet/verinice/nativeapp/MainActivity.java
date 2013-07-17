@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
             	
             	//Initialize NetworkTask to pass data back later
             	NetworkTask myTask = new NetworkTask(activity);
-            	myTask.execute(ip_address, port, username, password, "auth");
+            	myTask.execute(ip_address, port, username, password, "auth", "get", "");
             	  	
             }
         });

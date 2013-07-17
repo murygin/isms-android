@@ -25,10 +25,17 @@
             </intent-filter>
         </activity>
         
-        <!--  Hier die zweite Activity -->
+        <!--  Hier die ISO27000Tasks Activity -->
         <activity
                 android:name="sernet.verinice.nativeapp.Iso27000Tasks"
                 android:label="@string/iso27000tasks">
+        </activity>
+        <!--  END -->
+        
+        <!--  Hier die ISO27000TasksEditor Activity -->
+        <activity
+                android:name="sernet.verinice.nativeapp.Iso27000TasksEditor"
+                android:label="@string/iso27000tasksEditor">
         </activity>
         <!--  END -->
     </application>

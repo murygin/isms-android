@@ -5,20 +5,29 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.PasswordAuthentication;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.StatusLine;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 import android.app.Activity;
@@ -46,9 +55,13 @@ public class NetworkTask extends AsyncTask<String, Void, HttpResponse> {
 	String username = null;
 	String password = null;
 	String address = null;
+	String type = null;
+	String post_params = null;
+	int port_as_int;
 
 	public MainActivity activity;
 	public Iso27000Tasks Iso27000Tasks_activity;
+	public Iso27000TasksEditor Iso27000TasksEditor_activity;
 	
 	public NetworkTask(MainActivity a){
 		activity = a;
@@ -56,47 +69,81 @@ public class NetworkTask extends AsyncTask<String, Void, HttpResponse> {
 	public NetworkTask(Iso27000Tasks a){
 		Iso27000Tasks_activity = a;
 	}
+	public NetworkTask(Iso27000TasksEditor a){
+		Iso27000TasksEditor_activity = a;
+	}
 	
     @Override
     protected HttpResponse doInBackground(String... params) {
+    	
     	ip = params[0];
     	port = params[1];
     	username = params[2];
     	password = params[3];
     	address = params[4];
-    	int port_as_int = Integer.parseInt(port);
+    	type = params[5];
+    	post_params = params[6];
+    	port_as_int = Integer.parseInt(port);
+    	HttpResponse response = null;
     	
-    	String link = "http://" + ip + ":" + port + "/veriniceserver/rest/json/" + address + "/get";
-    	DefaultHttpClient httpclient = new DefaultHttpClient();
-        
+    	String link = "http://" + ip + ":" + port + "/veriniceserver/rest/json/" + address + "/" + type;
     	
-    	try{  
-    		httpclient.getCredentialsProvider().setCredentials(
-                    new AuthScope(ip, port_as_int),
-                    new UsernamePasswordCredentials(username, password));
-    		
-    		HttpGet httpget = new HttpGet(link);
-    		System.out.println("executing request" + httpget.getRequestLine());
-    		
-    		HttpResponse response = httpclient.execute(httpget);
-    		HttpEntity entity = response.getEntity();
+    	if (type == "get"){
 
-             System.out.println("----------------------------------------");
-             System.out.println(response.getStatusLine());
-             if (entity != null) {
-                 System.out.println("Response content length: " + entity.getContentLength());
-             }
+	    	
+	    	DefaultHttpClient httpclient = new DefaultHttpClient();
+	        
+	    	
+	    	try{  
+	    		httpclient.getCredentialsProvider().setCredentials(
+	                    new AuthScope(ip, port_as_int),
+	                    new UsernamePasswordCredentials(username, password));
+	    		
+	    		HttpGet httpget = new HttpGet(link);
+	    		System.out.println("executing request" + httpget.getRequestLine());
+	    		
+	    		response = httpclient.execute(httpget);
+	    		HttpEntity entity = response.getEntity();
+	
+	             System.out.println("----------------------------------------");
+	             System.out.println(response.getStatusLine());
+	             if (entity != null) {
+	                 System.out.println("Response content length: " + entity.getContentLength());
+	             }
+	
+	        
+	        
+	            
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	            return null;
+	        } finally {
+	        	
+	        	// httpclient.getConnectionManager().shutdown();
+	    }
+    	} else if (type == "post"){
+    		
+    		try {
+    			 
+    			System.out.println("HTTP Post call");
+	    		DefaultHttpClient httpClient = new DefaultHttpClient();
+	    		httpClient.getCredentialsProvider().setCredentials(
+	                    new AuthScope(ip, port_as_int),
+	                    new UsernamePasswordCredentials(username, password));
+	            HttpPost httppost = new HttpPost(link);
+	            
+	            //Add data body to post request
+	            httppost.addHeader("Content-Type", "application/json; charset=utf-8"); 
+	            httppost.setEntity(new StringEntity(post_params,"utf-8"));
 
-        
-        
-            return response;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-        	
-        	// httpclient.getConnectionManager().shutdown();
-    }
+	            response = httpClient.execute(httppost);
+            } catch (Exception e) {
+				e.printStackTrace();
+			}	
+    	}
+    	
+    	return response;
+    	
     }
 
     @Override

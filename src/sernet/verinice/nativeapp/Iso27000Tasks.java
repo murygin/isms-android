@@ -1,5 +1,7 @@
 package sernet.verinice.nativeapp;
 
+import java.util.ArrayList;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,14 +10,23 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class Iso27000Tasks extends Activity{
+	
+	String ip_address = "";
+	String port = "";
+	String username = "";
+	String password = "";
 	
 	public Iso27000Tasks activity = this;
 	
@@ -30,11 +41,15 @@ public class Iso27000Tasks extends Activity{
         // Receiving the Data
         String vname = i.getStringExtra("Vorname");
         String nname = i.getStringExtra("Nachname");
-
+        
+        ip_address = i.getStringExtra("ip_address");
+        port = i.getStringExtra("port");
+        username = i.getStringExtra("username");
+        password = i.getStringExtra("password");
 
         //Initialize NetworkTask to pass data back later
     	NetworkTask myTask = new NetworkTask(activity);
-    	myTask.execute(i.getStringExtra("ip_address"), i.getStringExtra("port"), i.getStringExtra("username"), i.getStringExtra("password"), "iso_27000");
+    	myTask.execute(ip_address, port, username, password, "iso_27000", "get", "");
 
         // Binding Click event to Button
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -59,37 +74,34 @@ public class Iso27000Tasks extends Activity{
 			try {
 				JSONArray json = new JSONArray(data);
 				JSONObject iso_27000_item;
-				
-				TableLayout tbl = (TableLayout) findViewById(R.id.iso_27000_table);
-				
-				
-				TableRow row = new TableRow(this); 
-				TextView text_view = new TextView(this);
-				
+
+				final ArrayList<JSONObject> json_list = new ArrayList<JSONObject>();
+				final ArrayList<String> list = new ArrayList<String>();
+
 				for(int i = 0; i < json.length(); i++) {
 					iso_27000_item = json.getJSONObject(i);
 			        System.out.println(iso_27000_item);
-					row = new TableRow(this);
-					
-					text_view = new TextView(this);
-					text_view.setText(iso_27000_item.get("name").toString());
-					row.addView(text_view);
-					
-					text_view = new TextView(this);
-					text_view.setText(iso_27000_item.get("controlTitle").toString());
-					row.addView(text_view);
-					
-					text_view = new TextView(this);
-					text_view.setText(iso_27000_item.get("dueDate").toString());
-					row.addView(text_view);
-					
-					tbl.addView(row);
-				 
-				}
 
+			        list.add(iso_27000_item.get("name").toString());
+			        json_list.add(iso_27000_item);
+					//text_view.setText(iso_27000_item.get("controlTitle").toString());
+					//text_view.setText(iso_27000_item.get("dueDate").toString());
+				}
 				 
+				ListAdapter listenAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, list);
+				final ListView listview = (ListView) findViewById(R.id.listview);
+				listview.setAdapter(listenAdapter);
 				
-			        
+				listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+						 
+					public void onItemClick(AdapterView<?> parentAdapter, View view, int position, long id) {
+					 
+					         // We know the View is a TextView so we can cast it
+					        TextView clickedView = (TextView) view;
+					        JSONObject json_object = json_list.get((int) id);
+					        callNextScreen(json_object);
+					     }
+					});
 
 				
 			} catch (JSONException e) {
@@ -100,4 +112,22 @@ public class Iso27000Tasks extends Activity{
 		
 		
 	}
+	
+	
+	private void callNextScreen(JSONObject item) {
+		//New intent
+        Intent Iso27000EditorScreen = new Intent(getApplicationContext(), Iso27000TasksEditor.class);
+
+        //Fill with user credentials for next screen
+        Iso27000EditorScreen.putExtra("ip_address", ip_address);
+        Iso27000EditorScreen.putExtra("port", port);
+        Iso27000EditorScreen.putExtra("username", username);
+        Iso27000EditorScreen.putExtra("password", password);
+        Iso27000EditorScreen.putExtra("item", item.toString());
+
+        // Start intent and change screen
+        startActivity(Iso27000EditorScreen);
+		
+	}
+	
 }
