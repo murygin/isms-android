@@ -72,8 +72,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dip"
                 android:text="@string/login"/>
-          <!-- Link to Registration Screen -->
-          <TextView android:id="@+id/link_to_register"
+          
+          <!-- Login Message -->
+          <TextView android:id="@+id/login_message"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dip"

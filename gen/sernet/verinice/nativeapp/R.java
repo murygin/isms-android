@@ -40,8 +40,8 @@ public final class R {
         public static final int edit_message=0x7f090000;
         public static final int ip_address_textfield=0x7f09000c;
         public static final int iso_27000=0x7f090002;
-        public static final int link_to_register=0x7f09000f;
         public static final int listview=0x7f090004;
+        public static final int login_message=0x7f09000f;
         public static final int password_textfield=0x7f09000b;
         public static final int port_textfield=0x7f09000d;
         public static final int saveButton=0x7f090008;

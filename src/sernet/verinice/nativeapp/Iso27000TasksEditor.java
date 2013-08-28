@@ -91,4 +91,12 @@ public class Iso27000TasksEditor extends Activity {
     	
     	
 	}
+	
+	private void callNextScreen() {
+
+	}
+	
+	public void networkReady(String data){
+		
+	}
 }

@@ -38,10 +38,8 @@ public class Iso27000Tasks extends Activity{
         Button backButton = (Button) findViewById(R.id.backButton);
  
         Intent i = getIntent();
-        // Receiving the Data
-        String vname = i.getStringExtra("Vorname");
-        String nname = i.getStringExtra("Nachname");
         
+        // Receiving the Data 
         ip_address = i.getStringExtra("ip_address");
         port = i.getStringExtra("port");
         username = i.getStringExtra("username");

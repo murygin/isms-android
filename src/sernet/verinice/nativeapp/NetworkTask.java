@@ -181,6 +181,9 @@ public class NetworkTask extends AsyncTask<String, Void, HttpResponse> {
         } else if (Iso27000Tasks_activity != null){
         	System.out.println("iso call");
         	Iso27000Tasks_activity.networkReady(answer);
+        } else if (Iso27000TasksEditor_activity != null){
+        	System.out.println("iso editor call");
+        	Iso27000TasksEditor_activity.networkReady(answer);
         }
     } 
 }
